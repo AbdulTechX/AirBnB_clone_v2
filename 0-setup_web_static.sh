@@ -3,7 +3,7 @@
 
 # Install Nginx if not already install
 apt-get update
-apt-get install -y nginx
+apt-get -y install nginx
 ufw allow 'Nginx HTTP'
 
 
@@ -26,12 +26,10 @@ echo "<html>
  </body>
 </html>" > /data/web_static/releases/test/index.html
 
-# set ownership to data folder to ubuntu user and group recursively
-
-chown -R ubuntu:ubuntu /data/
-
 # create symbolic link /data/web_static/current
-ln -s -f /data/web_static/releases/test/ /data/web_static/current
+ln -sf /data/web_static/releases/test/ /data/web_static/current
+
+sudo chown -R root:root /data/
 
 printf %s "server {
     listen 80 default_server;
@@ -53,7 +51,7 @@ printf %s "server {
     location /404 {
       root /etc/nginx/html;
       internal;
-    }
+    g
 
 }" > /etc/nginx/sites-enabled/default
 
