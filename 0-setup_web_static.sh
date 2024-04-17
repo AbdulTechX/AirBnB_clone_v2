@@ -4,7 +4,6 @@
 # Install Nginx if not already install
 apt-get update
 apt-get -y install nginx
-ufw allow 'Nginx HTTP'
 
 
 # create a directory folder if doesnt already exist
@@ -29,7 +28,8 @@ echo "<html>
 # create symbolic link /data/web_static/current
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-sudo chown -R root:root /data/
+chown -R ubuntu /data/
+chgrp -R ubuntu /data/
 
 printf %s "server {
     listen 80 default_server;
@@ -55,4 +55,4 @@ printf %s "server {
 
 }" > /etc/nginx/sites-enabled/default
 
-sudo service nginx restart
+sudo service nginx restartt
