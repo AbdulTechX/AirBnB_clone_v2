@@ -8,7 +8,7 @@ from fabric.api import run
 import os.path
 
 env.user = 'ubuntu'
-env.key_filename = '~/.ssh/id_rsa'
+env.key_filename = '~/.ssh/school'
 env.hosts = ['100.25.211.171', '100.24.72.44']
 
 
@@ -21,7 +21,7 @@ def do_deploy(archive_path):
     archive_file = archive_path.split('/')[-1]
     archive_name = archive_file.split('.')[0]
 
-    #Upload the archive 
+    # Upload the archive
     if put(archive_path, "/tmp/{}".format(archive_file)).failed is True:
         return False
     # Uncompress the archive to the folder
@@ -37,7 +37,8 @@ def do_deploy(archive_path):
     if run("rm /tmp/{}".format(archive_file)).failed is True:
         return False
     if run("mv /data/web_static/releases/{}/web_static/* "
-           "/data/web_static/releases/{}/".format(archive_name, archive_name)).failed is True:
+           "/data/web_static/releases/{}/".format(archive_name, archive_name)).
+            failed is True:
         return False
     if run("rm -rf /data/web_static/releases/{}/web_static".
            format(archive_name)).failed is True:
