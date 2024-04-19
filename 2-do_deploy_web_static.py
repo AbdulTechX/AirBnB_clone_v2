@@ -18,23 +18,24 @@ def do_deploy(archive_path):
     try:
         # Upload archive to /tmp/ directory on servers
         put(archive_path, '/tmp/')
+
         # Extract archive to /data/web_static/releases/<archive_filename>
-        archive_filename = os.path.basename(archive_path).split('.')[0]
+        archive_filename = archive_path.split('/')[-1]
+        archive_no_ext = archive_filename.split('.')[0]
 
         # Uncompress the archive to the folder 
-        release_folder = '/data/web_static/releases/' + archive_filename
-        run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{}.tgz -C {}'.format(archive_filename, release_folder))
+        run('mkdir -p /data/web_static/releases/{}/'.format(archive_no_ext))
+        run('tar -xzf /tmp/{} -C /data/web_static/releases/{}/'.format(archive_filename, archive_no_ext))
 
         # Delete the archive from tmp directory from the web server
-        run('rm /tmp/{}.tgz'.format(archive_filename))
+        run('rm /tmp/{}'.format(archive_filename))
 
         # delete symbolic link /data/web_static/current from the web server
         run('rm -rf /data/web_static/current')
 
 
         #Create a new the symbolic link
-        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(release_folder))
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(archive_no_ext))
 
         return True
     except:
