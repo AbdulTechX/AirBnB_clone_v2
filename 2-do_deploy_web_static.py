@@ -2,28 +2,26 @@
 """fabric script that distribute an archive to web servers using
    using do_deploy function.
 """
-from os.path import exists
 from fabric.api import env, put, run
-import os
+from os import path
 
-env.user = os.environ.get('ubuntu')  # Set the SSH user dynamically
-env.key_filename = os.environ.get('/root/.ssh/school')
+env.user = 'ubuntu'  # Set the SSH user dynamically
+env.key_filename = '~/.ssh/id_rsa'
 env.hosts = ['100.25.211.171', '100.24.72.44']
+
 
 def do_deploy(archive_path):
     """Deploys an archive to the web servers"""
-    if not exists(archive_path):
+    if not (path.exists(archive_path)):
         return False
 
     try:
         # Upload archive to /tmp/ directory on servers
         put(archive_path, '/tmp/')
-
-
         # Extract archive to /data/web_static/releases/<archive_filename>
         archive_filename = os.path.basename(archive_path).split('.')[0]
 
-        # Uncompress the archive to the folder /data/web_static/releases/<archive filename without extension>
+        # Uncompress the archive to the folder 
         release_folder = '/data/web_static/releases/' + archive_filename
         run('mkdir -p {}'.format(release_folder))
         run('tar -xzf /tmp/{}.tgz -C {}'.format(archive_filename, release_folder))
@@ -35,10 +33,8 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
 
 
-        #Create a new the symbolic link /data/web_static/current on the web server
-        #linked to the new version of your code (/data/web_static/releases/<archive filename without extension>)
-
-        run('ln -s /idata/web_static/releases/{} /data/web_static/current'.format(release_folder))
+        #Create a new the symbolic link
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(release_folder))
 
         return True
     except:
