@@ -38,7 +38,8 @@ def do_deploy(archive_path):
     if run("rm /tmp/{}".format(archive_file)).failed is True:
         return False
     if run("mv /data/web_static/releases/{}/web_static/* "
-           "/data/web_static/releases/{}/".format(archive_name, archive_name)).failed is True:
+           "/data/web_static/releases/{}/"
+           .format(archive_name, archive_name)).failed is True:
         return False
     if run("rm -rf /data/web_static/releases/{}/web_static".
            format(archive_name)).failed is True:
