@@ -1,23 +1,22 @@
 #!/usr/bin/python3
-"""write a fabric script that deletes out of date archive using
-   the function
-"""
-from fabric.api import env
-from fabric.api import put
-from fabric.api import run
-from fabric.api import local
+# Fabfile to delete out-of-date archives.
 import os
-from datetime import datetime
+from fabric.api import *
 
 env.user = 'ubuntu'
 env.key_filename = '~/.ssh/school'
 env.hosts = ['100.25.211.171', '100.24.72.44']
 
+
 def do_clean(number=0):
-     """Deletes out-of-date archives.
+    """Delete out-of-date archives.
 
     Args:
-        number (int): Number of the archives to keep.
+        number (int): The number of archives to keep.
+
+    If number is 0 or 1, keeps only the most recent archive. If
+    number is 2, keeps the most and second-most recent archives,
+    etc.
     """
     number = 1 if int(number) == 0 else int(number)
 
@@ -26,8 +25,8 @@ def do_clean(number=0):
     with lcd("versions"):
         [local("rm ./{}".format(a)) for a in archives]
 
-    with cd("/data/web_static/release"):
-        archive = run("ls -tr").split()
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
         archives = [a for a in archives if "web_static_" in a]
         [archives.pop() for i in range(number)]
         [run("rm -rf ./{}".format(a)) for a in archives]
