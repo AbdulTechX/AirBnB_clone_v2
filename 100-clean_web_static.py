@@ -2,7 +2,10 @@
 """write a fabric script that deletes out of date archive using
    the function
 """
-from fabric.api import *
+from fabric.api import env
+from fabric.api import put
+from fabric.api import run
+from fabric.api import local
 import os
 from datetime import datetime
 
