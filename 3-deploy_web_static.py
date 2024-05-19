@@ -14,7 +14,7 @@ from fabric.api import run
 
 env.user = 'ubuntu'
 env.key_filename = '~/.ssh/id_rsa'
-env.hosts = ['54.234.68.137', '52.3.249.232']
+env.hosts = ['54.85.118.56', '52.3.249.232']
 
 
 def do_pack():
